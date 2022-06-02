@@ -4,6 +4,8 @@ pragma solidity 0.8.13;
 import {ERC1155} from "solmate/tokens/ERC1155.sol";
 
 contract AdakaTix is ERC1155 {
+    string public name;
+    string public symbol;
 
     string public baseURI;
     uint256[2] public totalSupply;
@@ -12,7 +14,9 @@ contract AdakaTix is ERC1155 {
     uint256 maxMintAmount = 20;
     mapping(address => uint256) public membershipsMinted;
 
-    constructor(string memory _baseURI){
+    constructor(string memory _name, string memory _symbol, string memory _baseURI){
+        name = _name;
+        symbol = _symbol;
         baseURI = _baseURI;
     }
 
