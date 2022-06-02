@@ -2,8 +2,9 @@
 pragma solidity 0.8.13;
 
 import {ERC1155} from "solmate/tokens/ERC1155.sol";
+import {Owned} from "solmate/auth/Owned.sol";
 
-contract AdakaTix is ERC1155 {
+contract AdakaTix is ERC1155, Owned {
     string public name;
     string public symbol;
 
@@ -14,7 +15,13 @@ contract AdakaTix is ERC1155 {
     uint256 maxMintAmount = 20;
     mapping(address => uint256) public membershipsMinted;
 
-    constructor(string memory _name, string memory _symbol, string memory _baseURI){
+    address approvedBurner;
+
+    constructor(
+        string memory _name,
+        string memory _symbol,
+        string memory _baseURI
+    ) Owned(msg.sender) {
         name = _name;
         symbol = _symbol;
         baseURI = _baseURI;
@@ -29,7 +36,7 @@ contract AdakaTix is ERC1155 {
         require(msg.value == amount * price[id], "Value doesn't match price");
         require(amount < maxMintAmount, "Can't mint that many");
 
-        if (id == 0){
+        if (id == 0) {
             require(membershipsMinted[msg.sender] + amount <= 2);
             membershipsMinted[msg.sender] += amount;
         }
@@ -38,4 +45,12 @@ contract AdakaTix is ERC1155 {
         _mint(msg.sender, id, amount, "");
     }
 
+    function burnTicketsFrom(address burner, uint256 amount) public {
+        require(msg.sender == approvedBurner, "Not Approved");
+        _burn(burner, 1, amount);
+    }
+
+    function setApprovedBurner(address burner) public onlyOwner {
+        approvedBurner = burner;
+    }
 }
