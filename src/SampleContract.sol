@@ -1,28 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
-import {ERC1155} from "@solmate/tokens/ERC1155.sol";
+import {ERC1155} from "solmate/tokens/ERC1155.sol";
 
-contract SampleContract {
-    uint256 num2;
+contract AdakaTix is ERC1155 {
 
-    function func1(uint256 num) external {
-        num2 = num;
+    string public baseURI;
 
-        for (uint256 i = 0; i < num; i++) {
-            num2--;
-        }
-
-        assert(num2 == 0);
+    constructor(string memory _baseURI){
+        baseURI = _baseURI;
     }
 
-    function func2(uint256 num) external {
-        num2 = num;
-
-        for (uint256 i = 0; i < num; i++) {
-            num2--;
-        }
-
-        assert(num2 == 0);
+    function uri(uint256 id) public view virtual override returns (string memory) {
+        return string(abi.encodePacked(baseURI, id));
     }
 }
