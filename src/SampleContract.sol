@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
+import {ERC1155} from "@solmate/tokens/ERC1155.sol";
+
 contract SampleContract {
     uint256 num2;
 
